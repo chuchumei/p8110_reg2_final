@@ -1,0 +1,10 @@
+data final;
+infile “” delimiter=’,’ missover dsd;
+input id time trt health agegroup;
+run;
+
+proc genmod data=final;
+class id time (ref=’0’) / param=ref;
+model health=time trt agegroup trt*time time*agegroup trt*agegroup time*trt*agegroup/dist=nor link=identity type3 wald;
+repeated subject=id/type=cs modelse;
+run;
